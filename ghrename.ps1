@@ -1,4 +1,4 @@
-﻿# Situation: when filming with GoPro if video is longer than 5:20 it is split into multiple files
+# Situation: when filming with GoPro if video is longer than 5:20 it is split into multiple files
 # Problem: because of how files are named, sorting files names alphanumerically doesn't result in the file order that we want
 # Solution: rename the files so that sorting would be fixed
 
@@ -7,6 +7,22 @@
 # 789 - file number
 
 $ErrorActionPreference = "Stop"
+
+function GetCreationDate($file)
+{
+  # trying to get media creation date first
+  $Shell = New-Object -COMObject Shell.Application
+  $ShellFolder = $Shell.NameSpace($file.Directory.ToString())
+  $ShellFile = $ShellFolder.ParseName($file.Name)
+
+  $creationDate = $ShellFile.ExtendedProperty("System.Media.DateEncoded")
+  if (-Not $creationDate)
+  {
+    $creationDate = $file.CreationTime
+  }
+  
+  return $creationDate.ToString("dd.MM.yyyy")
+}
 
 $fileList = Get-ChildItem
 
@@ -38,7 +54,9 @@ $finalFileList = New-Object 'system.collections.generic.dictionary[string,string
 foreach($newFileName in $newFileList.Keys)
 {
   # okey we have correct file number/part number, now we need to add date and file type
-  $creationDate = $newFileList[$newFileName].CreationTime.ToString("dd.MM.yyyy")
+
+  $creationDate = GetCreationDate $newFileList[$newFileName]
+
   $finalFileName = $newFileName + ' ' + $creationDate + '.mp4'
 
   echo ($newFileList[$newFileName].Name + ' -> ' + $finalFileName)
@@ -54,7 +72,3 @@ if ($answer -eq 'y') {
 
   echo 'Rename done'
 }
-
-
-# TODO: promt to do the rename (y/n)
-# TODO: do the rename
