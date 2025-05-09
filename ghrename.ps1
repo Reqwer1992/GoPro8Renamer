@@ -3,6 +3,7 @@
 # Solution: rename the files so that sorting would be fixed
 
 # Example file names for one video: GH010789.MP4 , GH020789.MP4 , GH030789.MP4
+# the game (you lost)
 # 1,2,3 - file part numbers
 # 789 - file number
 
