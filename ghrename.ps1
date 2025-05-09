@@ -5,6 +5,7 @@
 # Example file names for one video: GH010789.MP4 , GH020789.MP4 , GH030789.MP4
 # 1,2,3 - file part numbers
 # 789 - file number
+#test
 
 $ErrorActionPreference = "Stop"
 
